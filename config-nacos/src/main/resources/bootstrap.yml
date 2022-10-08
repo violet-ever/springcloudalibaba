@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: nacos-config
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.12.59:8848
+      config:
+        file-extension: yaml
+        namespace: dev
+        group: DEFAULT_GROUP
+        extension-configs:
+          - data-id: 123
+            group: 123
+            refresh: true
+          - data-id:

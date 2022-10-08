@@ -1,0 +1,38 @@
+server:
+  port: 12006
+
+spring:
+  application:
+    name: order-service
+  cloud:
+    nacos:
+      server-addr: 192.168.12.59:8848
+      discovery:
+        username: nacos
+        password: nacos
+        namespace: dev
+feign:
+  client:
+    config:
+      default: # 设置的全局超时时间
+        connectTimeout: 2000 # 请求连接的超时时间
+        readTimeout: 5000 # 请求处理的超时时间
+  #OpenFeign 底层通信组件默认使用 JDK 自带的 URLConnection 对象进行 HTTP 请求的，因为没有使用连接池，所以性能不是很好。
+  #我们可以将 OpenFeign 的通讯组件，手动替换成像 Apache HttpClient 或 OKHttp 这样的专用通信组件，
+  #这些的专用通信组件自带连接池可以更好地对 HTTP 连接对象进行重用与管理，同时也能大大的提升 HTTP 请求的效率。
+  httpclient:
+    enabled: true # 开启HttpClient
+  #OpenFeign 默认不会开启数据压缩功能，但我们可以手动的开启它的 Gzip 压缩功能，这样可以极大的提高宽带利用率和加速数据的传输速度
+  #如果服务消费端的 CPU 资源比较紧张的话，建议不要开启数据的压缩功能，因为数据压缩和解压都需要消耗 CPU 的资源，这样反而会给 CPU 增加了额外的负担，也会导致系统性能降低。
+  compression:
+    request:
+      enabled: true # 开启请求数据的压缩功能
+      mime-types: text/xml,application/xml, application/json # 压缩类型
+      min-request-size: 1024 # 最小压缩值标准，当数据大于 1024 才会进行压缩
+    response:
+      enabled: true # 开启响应数据压缩功能
+
+# 配置feign的日志打印，默认不打印
+logging:
+  level:
+    com.hk.order.feign: debug
